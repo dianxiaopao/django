@@ -13,6 +13,7 @@ class StudentSerializer(serializers.ModelSerializer):
     # 使用学号查出该学生的成绩
     def get_student_sorce(self, obj):
         print obj.student_id
+       # 可以同时处理多个Snippet实例, 只需要在它的构造方法中加入many=True这个参数即可,如下：
         return StudentSorceSerializer(StudentSorce.objects.filter(student_id=obj.student_id), many=True).data
 
 class StudentSorceSerializer(serializers.ModelSerializer):

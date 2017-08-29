@@ -21,4 +21,5 @@ from student.views import *
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include('student.urls')),
+    url(r'^account/', include('account.urls'))
 ]

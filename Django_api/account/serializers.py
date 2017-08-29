@@ -16,7 +16,7 @@ class AccountSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
     repeat_password = serializers.CharField()
-   #create ,update 默認方法
+   #create ,update  默认方法
     def create(self, validated_data):
         User.objects.create_user(username=validated_data.get('username'),
                                  email=validated_data.get('email'),
@@ -33,7 +33,7 @@ class AccountSerializer(serializers.Serializer):
         # User.objects.update()
         instance.save()
         return instance
-
+    # 重写验证方法 验证格式固定  validate_字段名
     def validate_email(self, value):
         try:
             result_email = User.objects.get(email=value)
@@ -56,7 +56,11 @@ class AccountSerializer(serializers.Serializer):
 
     def validate_username(self, value):
         if re.match("^[A-Za-z][A-Za-z0-9_.]*$", value):
-            return value
+            try:
+                User.objects.get(username=value)
+            except User.DoesNotExist:
+                return value
+            raise serializers.ValidationError("用户名已被注册")
         else:
             raise serializers.ValidationError("用户名只能有数字字母下划线组成")
 
