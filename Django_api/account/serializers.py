@@ -16,7 +16,7 @@ class AccountSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
     repeat_password = serializers.CharField()
-
+   #create ,update 默認方法
     def create(self, validated_data):
         User.objects.create_user(username=validated_data.get('username'),
                                  email=validated_data.get('email'),
