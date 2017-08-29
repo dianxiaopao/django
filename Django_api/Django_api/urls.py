@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Django_api URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -13,13 +14,11 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 from student.views import *
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'students/$', StudentList.as_view()),
-    # “(?P<name>...) 子串匹配到的内容将可以用命名的name来提取url中的值。组的name必须是有效的python标识符，而且在本表达式内不重名。”
-    url(r'students/(?P<name>[a-zA-Z]+)/$', StudentDetail.as_view()),
+    url(r'^api/', include('student.urls')),
 ]

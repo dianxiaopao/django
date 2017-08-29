@@ -2,8 +2,8 @@
 from __future__ import unicode_literals
 
 from rest_framework import generics
-from student.models import Student
-from student.serializers import StudentSerializer
+from student.models import Student,StudentSorce
+from student.serializers import StudentSerializer,StudentSorceSerializer
 from rest_framework.response import Response
 from rest_framework import status
 # Create your views here.
@@ -17,8 +17,6 @@ class StudentList(generics.ListCreateAPIView):
 class StudentDetail(generics.RetrieveUpdateAPIView):
     serializer_class = StudentSerializer
     queryset = Student.objects.all()
-    lookup_field = 'name'
-    print ('wwwwwwwwwwwwwwwwwwwww')
     # 得到一个数据集
     def get_queryset(self):
         return Student.objects.filter(name=self.kwargs['name'])
@@ -31,6 +29,8 @@ class StudentDetail(generics.RetrieveUpdateAPIView):
         print(self.request.GET.get('test', None))
 
         queryset = self.get_queryset()
+        for blog in queryset:
+            print blog.name;
         serializer = StudentSerializer(queryset, many=True)
         return Response({
             'data': serializer.data,
@@ -40,6 +40,3 @@ class StudentDetail(generics.RetrieveUpdateAPIView):
     # 更新某一个学生的信息
     def update(self, request, *args, **kwargs):
         pass
-
-
-
