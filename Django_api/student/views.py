@@ -7,6 +7,8 @@ from student.models import Student,StudentSorce
 from student.serializers import StudentSerializer,StudentSorceSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
 # 简单方式
 # class StudentList(generics.ListCreateAPIView):
 #      queryset = Student.objects.all()
@@ -69,15 +71,20 @@ class StudentDetail(APIView):
         serializer = StudentSerializer(queryset, many=True)
         return Response({
             'data': serializer.data,
-            #'sorce': StudentSorceSerializer(StudentSorce.objects.all(), many=True).data
         })
 
     def post(self, request, format=None):
-        print(request.data['name'])
-        serializer = StudentSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+       # data = request.data  等同于下面的代码  最终通过json.load方法得带json对象  dict  dict 使用get方法 防止 娶不到key而抛出异常
+       # data = JSONParser().parse(request)
+       #可以获取 post  raw/form-data类型的数据
+        data = request.data
+       # print  type(data)
+        names=data.get('name',default=None)
+       # print 'postdata is ' + names
+        if names is None :
+            return Response({'data': '{}', 'err_code': '1', 'err_desc': '参数不能为空'}, status=status.HTTP_200_OK)
+        queryset=Student.objects.filter(name=names)
+        serializer = StudentSerializer(queryset, many=True)
+        return Response({'data': serializer.data}, status=status.HTTP_200_OK)
 
 
