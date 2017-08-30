@@ -6,15 +6,18 @@ from rest_framework import status
 from dataAPI import api_response #自定义的返回格式 JsonResponse
 
 
-def api_paging(objs, request, Serializer):
+def api_paging(objs, page_size,page, Serializer):
     """
     objs : 实体对象
     request : 请求对象
     Serializer : 对应实体对象的序列化
     """
+    # 1 if 5 > 3 else 0
+    # small = x if x < y else y
     try:
-        page_size = int(request.data.get('page_size', 2))
-        page = int(request.data.get('page', 1))
+        page_size =int(page_size) if page_size is not  None else  int(2)
+        #page_size = int(request.data.get('page_size', 2))
+        page = int(page) if page_size is not None else  int(1)
     except (TypeError, ValueError):
         return api_response.JsonResponse(code=status.HTTP_400_BAD_REQUEST, desc='page and page_size must be integer!')
     """

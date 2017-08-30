@@ -34,11 +34,14 @@ class StudentList(APIView):
 class StudentListPaginator(APIView):
     def post(self, request, format=None):
         # 可以获取 post  raw/form-data类型的数据
-        data = request.data
         # print  type(data)
-        names = data.get('1',None)
+        params = request.data.get('1',None)
+        if params is None:
+            # return Response({'data': '{}', 'err_code': '1', 'err_desc': '参数不能为空'}, status=status.HTTP_200_OK)
+            return api_response.JsonResponse(data=None, code='1', desc='参数不能为空')  # 使用上面的进行返回
         queryset = Student.objects.all()
-        return api_paginator.api_paging(queryset, request, StudentSerializer)  # 分页处理，并返回
+        #return api_paginator.api_paging(queryset, None, None,StudentSerializer)  # 分页处理，并返回
+        return api_paginator.api_paging(queryset, params.get('page_size',None), params.get('page',None),StudentSerializer)  # 分页处理，并返回
 
 
 # 简单方式 单个学生
