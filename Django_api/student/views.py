@@ -19,7 +19,7 @@ class StudentList(APIView):
     def get(self, request, format=None):
         queryset = Student.objects.all()
         serializer = StudentSerializer(queryset, many=True)
-        dict = {'code': 0000, 'data': serializer.data, 'msg': "success"}
+        dict = {'code': 0, 'data': serializer.data, 'msg': "success"}
         return Response(dict)
 
     # def post(self, request, format=None):
