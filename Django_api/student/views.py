@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
+from dataAPI import  api_response,api_paginator
 # 简单方式
 # class StudentList(generics.ListCreateAPIView):
 #      queryset = Student.objects.all()
@@ -19,8 +20,8 @@ class StudentList(APIView):
     def get(self, request, format=None):
         queryset = Student.objects.all()
         serializer = StudentSerializer(queryset, many=True)
-        dict = {'code': 0, 'data': serializer.data, 'msg': "success"}
-        return Response(dict)
+        #dict = {'code': 0, 'data': serializer.data, 'msg': "success"}
+        return api_response.JsonResponse(data=serializer.data, code=status.HTTP_200_OK, desc='ok') #使用上面的进行返回
 
     # def post(self, request, format=None):
     #     serializer = SnippetSerializer(data=request.data)
@@ -28,6 +29,12 @@ class StudentList(APIView):
     #         serializer.save()
     #         return Response(serializer.data, status=status.HTTP_201_CREATED)
     #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#学生列表，分页
+class StudentListPaginator(APIView):
+    def post(self, request, format=None):
+        queryset = Student.objects.all()
+        return api_paginator.api_paging(queryset, request, StudentSerializer)  # 分页处理，并返回
 
 
 # 简单方式 单个学生
@@ -82,9 +89,10 @@ class StudentDetail(APIView):
         names=data.get('name',default=None)
        # print 'postdata is ' + names
         if names is None :
-            return Response({'data': '{}', 'err_code': '1', 'err_desc': '参数不能为空'}, status=status.HTTP_200_OK)
+            #return Response({'data': '{}', 'err_code': '1', 'err_desc': '参数不能为空'}, status=status.HTTP_200_OK)
+             return api_response.JsonResponse(data=None, code='1', desc='参数不能为空')  # 使用上面的进行返回
         queryset=Student.objects.filter(name=names)
         serializer = StudentSerializer(queryset, many=True)
-        return Response({'data': serializer.data}, status=status.HTTP_200_OK)
+        return api_response.JsonResponse(data=serializer.data, code=status.HTTP_200_OK, desc='ok')  # 使用上面的进行返回
 
 
