@@ -33,6 +33,10 @@ class StudentList(APIView):
 #学生列表，分页
 class StudentListPaginator(APIView):
     def post(self, request, format=None):
+        # 可以获取 post  raw/form-data类型的数据
+        data = request.data
+        # print  type(data)
+        names = data.get('1',None)
         queryset = Student.objects.all()
         return api_paginator.api_paging(queryset, request, StudentSerializer)  # 分页处理，并返回
 
@@ -87,6 +91,8 @@ class StudentDetail(APIView):
         data = request.data
        # print  type(data)
         names=data.get('name',default=None)
+       #或者
+        names = data.get('name', None)
        # print 'postdata is ' + names
         if names is None :
             #return Response({'data': '{}', 'err_code': '1', 'err_desc': '参数不能为空'}, status=status.HTTP_200_OK)
