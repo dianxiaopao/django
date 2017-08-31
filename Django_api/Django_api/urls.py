@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^api-token-auth/', obtain_jwt_token),
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include('student.urls')),
+    url(r'^users/', include('users.urls')),
     url(r'^account/', include('account.urls'))
 ]
