@@ -17,11 +17,15 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from student.views import *
-from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
 
 urlpatterns = [
-    # 使用django-rest-framework-jwt进行生成和刷新token的url
+    # 使用django-rest-framework-jwt进行生成
     url(r'^api-token-auth/', obtain_jwt_token),
+    #校验token
+    url(r'^api-token-verify/', verify_jwt_token),
+    #刷新token
+    url(r'^api-token-refresh/', refresh_jwt_token),
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include('student.urls')),
     url(r'^users/', include('users.urls')),
