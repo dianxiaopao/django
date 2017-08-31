@@ -25,5 +25,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include('student.urls')),
     url(r'^users/', include('users.urls')),
-    url(r'^account/', include('account.urls'))
+    url(r'^account/', include('account.urls')),
+    url(r'^sclass/', include('sclass.urls'))
+
 ]
